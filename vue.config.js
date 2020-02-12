@@ -3,6 +3,7 @@ module.exports = {
   configureWebpack: {
     externals: {
       BaiduMap: 'BMap',
+      BMapLib: 'BMapLib',
       echarts: 'echarts'
     }
   }

@@ -1,7 +1,29 @@
 <template>
   <div class="view">
+    <div class="top">
+      <img class="logo" src="../assets/images/logo.png" />
+      <span class="tip-1 tip">新型冠状病毒肺炎</span>
+      <span class="tip-2 tip">疫情实时追踪</span>
+      <span class="tip-3 tip">数据来源:国家及卫健委每日信息发布</span>
+    </div>
+    <div class="dashboard">
+      <div class="title">
+        统计截止<span>2020-02-11 20:42:54</span> 更新于<span>3分钟</span>前
+      </div>
+      <div class="tj">
+        <div class="tj-item" v-for="i in 4" :key="i">
+          <div class="tj-item-desc">
+            <p class="tj-item-new-grow">较上日<span>+2509</span></p>
+            <p class="tj-item-nums">42744</p>
+          </div>
+          <div class="tj-item-title">
+            疑似病例
+          </div>
+        </div>
+      </div>
+    </div>
     <button @click="backQuanGuo">全国</button>
-    <div ref="chatrs" style="width: 100%;height:400px;"></div>
+    <div ref="chatrs" style="width: 100%;height:340px;"></div>
     <YQCollapse />
   </div>
 </template>
@@ -119,3 +141,76 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.top {
+  width: 100%;
+  height: 165px;
+  background-color: #0057fb;
+}
+.top .logo {
+  width: 89px;
+  /* height: 18px; */
+  margin-left: 18px;
+  margin-top: 18px;
+}
+.top .tip {
+  display: block;
+  color: #fff;
+  margin-left: 18px;
+  margin-top: 10px;
+}
+.top .tip-1 {
+  font-size: 18px;
+}
+.top .tip-2 {
+  font-size: 28px;
+}
+.top .tip-3 {
+  font-size: 12px;
+}
+.dashboard {
+  height: 134px;
+}
+.dashboard .title {
+  font-size: 16px;
+  color: grey;
+}
+.dashboard .title span {
+  color: #000;
+}
+.dashboard .tj {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.dashboard .tj .tj-item {
+  width: 22%;
+}
+.dashboard .tj .tj-item p {
+  margin: 0;
+  text-align: center;
+  /* font-weight: bold; */
+}
+.dashboard .tj .tj-item .tj-item-desc {
+  background-color: #ebd5e9e1;
+  padding: 1rem 0.2rem;
+}
+/* font-size: 14px; */
+.dashboard .tj .tj-item .tj-item-desc .tj-item-new-grow {
+  font-size: 12px;
+}
+.tj-item-new-grow span {
+  color: red;
+}
+.dashboard .tj .tj-item .tj-item-desc .tj-item-nums {
+  font-size: 18px;
+  margin-top: 0.5rem;
+}
+.dashboard .tj .tj-item .tj-item-title {
+  font-size: 16px;
+  background-color: #d3afd0e1;
+  text-align: center;
+  padding: 0.5rem 0.1rem;
+}
+</style>

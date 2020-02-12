@@ -2,7 +2,8 @@ module.exports = {
   publicPath: './',
   configureWebpack: {
     externals: {
-      BaiduMap: 'BMap'
+      BaiduMap: 'BMap',
+      echarts: 'echarts'
     }
   }
 };

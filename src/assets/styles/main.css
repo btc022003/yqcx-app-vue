@@ -15,3 +15,25 @@ li {
 a {
   text-decoration: none;
 }
+img {
+  max-width: 100%;
+}
+
+.notice {
+  width: 240px;
+  font-size: 12px;
+}
+.notice p {
+  font-size: 0.8rem;
+}
+.notice h3 {
+  font-size: 1.5em;
+  margin: 0 0;
+}
+.notice strong {
+  font-size: 1.2em;
+  color: #f75c2f;
+}
+.notice img {
+  margin: 10px 0;
+}

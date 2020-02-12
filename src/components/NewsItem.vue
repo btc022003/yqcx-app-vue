@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import newsImg from '../assets/images/n-item-demo.png';
+import newsImg from '../assets/images/n-item-demo.jpg';
 export default {
   props: {
     hasImg: {

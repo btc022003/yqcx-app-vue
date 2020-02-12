@@ -60,16 +60,17 @@ export default {
       this.loadMapData('/datas/map/json/china');
     },
     changeMapData(params) {
+      console.log('....');
       // https://github.com/hotoo/pinyin
       // console.log(params);
-      if (params.name.indexOf('市') > -1) {
-        this.loadMapData('/datas/map/json/citys/' + cityMap[params.name]);
-      } else {
-        const cityNamePY = Pinyin(params.name, {
-          style: Pinyin.STYLE_NORMAL
-        }).join('');
-        this.loadMapData('/datas/map/json/province/' + cityNamePY);
-      }
+      // if (params.name.indexOf('市') > -1) {
+      //   this.loadMapData('/datas/map/json/citys/' + cityMap[params.name]);
+      // } else {
+      //   const cityNamePY = Pinyin(params.name, {
+      //     style: Pinyin.STYLE_NORMAL
+      //   }).join('');
+      //   this.loadMapData('/datas/map/json/province/' + cityNamePY);
+      // }
     },
     async loadMapData(mapName) {
       var strUrl = mapName + '.json';
@@ -87,18 +88,33 @@ export default {
       echarts.registerMap(mapName, mapData.data);
       this.option = {
         tooltip: {
+          triggerOn: 'click',
           formatter: function(params, ticket, callback) {
             return (
-              params.seriesName + '<br />' + params.name + '：' + params.value
+              params.seriesName +
+              '<br />' +
+              params.name +
+              '：' +
+              params.value +
+              '<a style="pointer-events: all;color: #fff;">详情>></a>'
             );
           }
         },
         visualMap: {
+          type: 'piecewise',
           min: 0,
           max: 1500,
           left: 'left',
           top: 'bottom',
-          text: ['高', '低'],
+          // text: ['高', '低'],
+          pieces: [
+            { min: 1, max: 9 }, // 不指定 max，表示 max 为无限大（Infinity）。
+            { min: 10, max: 99 },
+            { min: 100, max: 499 },
+            { min: 500, max: 999 },
+            { min: 1000, max: 10000 },
+            { min: 10000 }
+          ],
           inRange: {
             color: ['#EAEBEF', '#9C090D']
           },
@@ -175,6 +191,7 @@ export default {
 .dashboard .title {
   font-size: 16px;
   color: grey;
+  margin: 0.5rem 0.2rem;
 }
 .dashboard .title span {
   color: #000;

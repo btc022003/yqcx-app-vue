@@ -77,6 +77,7 @@ export default {
     showInfo(e) {
       // alert(e.point.lng + ', ' + e.point.lat);
       // 点击地图之后画查询图形
+      console.log(e);
       this.map.clearOverlays();
       const mPoint = new BMap.Point(e.point.lng, e.point.lat);
       var circle = new BMap.Circle(mPoint, 1000, {
@@ -89,6 +90,20 @@ export default {
       console.log(this.map.getOverlays()); // 获取覆盖物
       const c = new BMap.Point(116.404, 39.915);
       console.log(BMapLib.GeoUtils.isPointInCircle(c, circle));
+
+      var sContent = `<div class="notice">
+        <h3>周边疫情</h3>
+        <p>你所选择的
+          <strong>江苏省南通市</strong>
+          目前已有 <strong>37</strong> 起新型冠状病毒肺炎确诊病例。离你最近的在
+          <strong>江苏省南通市海门市滨江街道兄弟村24组</strong>，距离你
+          <strong>4.27</strong> 公里。确诊病例已收入定点医院救治，只要做好自身防护，无需过分担心哦！</p>
+        <p>
+          <img src="https://z.cbndata.com/2019-nCoV/images/banner.png">
+        </p>
+        <p style="color: #999">统计截至 2020-02-12 15:53:07</p></div>`;
+      var infoWindow = new BMap.InfoWindow(sContent);
+      this.map.openInfoWindow(infoWindow, mPoint);
     },
     loadYQData() {
       axios.get('/datas/city_info.json').then(res => {

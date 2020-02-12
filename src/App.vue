@@ -1,32 +1,37 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <router-view class="main-container" />
+    <div class="nav">
+      <ul>
+        <li><router-link :to="{ name: 'Home' }">疫情数据</router-link></li>
+        <li><router-link :to="{ name: 'Around' }">周边疫情</router-link></li>
+        <li><router-link :to="{ name: 'Guide' }">防控指南</router-link></li>
+        <li><router-link :to="{ name: 'News' }">千锋动态</router-link></li>
+      </ul>
     </div>
-    <router-view/>
   </div>
 </template>
 
-<style>
+<style scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
-
-#nav {
-  padding: 30px;
+.main-container {
+  flex: 1;
+  overflow: auto;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.nav {
+  height: 45px;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.nav ul {
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  justify-content: space-around;
 }
 </style>

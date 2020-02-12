@@ -1,18 +1,17 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="view">
+    <YQCollapse />
   </div>
 </template>
 
 <script>
+// 疫情数据
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import YQCollapse from '../components/YQCollapse';
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    YQCollapse
   }
-}
+};
 </script>

@@ -160,7 +160,7 @@ export default {
         areaTree: []
       },
       provinceData: [],
-      timeNow: moment().format('YYYY-MM-DD HH:mm:ss'),
+      timeNow: '',
       chartLegendData: [],
       chartXData: [],
       chartSeries: [],
@@ -168,6 +168,8 @@ export default {
     };
   },
   async mounted() {
+    this.timeNow = moment().format('YYYY-MM-DD HH:mm:ss');
+    localStorage.setItem('updateTime', this.timeNow);
     const resu = await axios.post(
       'http://api.cat-shop.penkuoer.com/api/v2/proxy',
       {
@@ -208,7 +210,7 @@ export default {
     backQuanGuo() {
       this.loadMapData('/datas/map/json/china');
     },
-    loadLineChart(type = 'today') {
+    async loadLineChart(type = 'today') {
       this.switchIndex = type;
       if (type == '3' || type == '2') {
         return;

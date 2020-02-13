@@ -1,30 +1,36 @@
 <template>
   <div class="view">
     <div class="top">
-      <router-link :to="{name: 'Home'}" class="btn-back">全国数据</router-link>
+      <router-link :to="{ name: 'Home' }" class="btn-back"
+        >全国数据</router-link
+      >
       <img class="logo" src="../assets/images/logo.png" />
       <span class="tip-1 tip">新型冠状病毒肺炎</span>
       <span class="tip-2 tip">
         <strong
           style="margin: 0.2rem;background-color: #fff;color: #000; padding: 0.1rem;font-size: 28px;border-radius: 8px;"
-        >{{$route.query.name}}</strong>实时疫情
+          >{{ $route.query.name }}</strong
+        >实时疫情
       </span>
       <span class="tip-3 tip">数据来源:国家及卫健委每日信息发布</span>
     </div>
     <div class="dashboard">
       <div class="title">
         统计截止
-        <span>2020-02-11 20:42:54</span> 更新于
-        <span>3分钟</span>前
+        <span>{{ timeNow }}</span>
       </div>
       <div class="tj">
         <div class="tj-item item-confirm">
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ yqData.today.confirm }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ yqData.total.confirm }}
+            </p>
           </div>
           <div class="tj-item-title">全部确诊</div>
         </div>
@@ -32,9 +38,13 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ yqData.today.suspect }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ yqData.total.suspect }}
+            </p>
           </div>
           <div class="tj-item-title">疑似病例</div>
         </div>
@@ -42,9 +52,11 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color">+{{ yqData.today.heal }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ yqData.total.heal }}
+            </p>
           </div>
           <div class="tj-item-title">治愈人数</div>
         </div>
@@ -52,9 +64,11 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color">+{{ yqData.today.dead }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ yqData.total.dead }}
+            </p>
           </div>
           <div class="tj-item-title">死亡人数</div>
         </div>
@@ -63,10 +77,14 @@
     <div class="main" style="margin: 0; background-color: #fff">
       <div ref="chatrs" style="width: 100%;height:340px;"></div>
     </div>
-    <LineChart title="疫情趋势图" />
+    <LineChart
+      :chartLegendData="chartLegendData"
+      :chartXData="chartXData"
+      :chartSeries="chartSeries"
+    />
     <div class="qg">
       <div class="s"></div>
-      <h3>{{$route.query.name}}疫情</h3>
+      <h3>{{ $route.query.name }}疫情</h3>
       <p>7:00-9:00为更新高峰期，数据如有之后情谅解</p>
     </div>
     <div class="yq-list ul">
@@ -77,17 +95,15 @@
           <li>累计确诊</li>
           <li>治愈</li>
           <li>死亡</li>
-          <li>病死率</li>
         </ul>
       </div>
-      <div class="yq-item">
-        <ul class="province" @click="item.opened = !item.opened">
-          <li>郑州</li>
-          <li>2097</li>
-          <li>31728</li>
-          <li>900</li>
-          <li>9801</li>
-          <li>3.07%</li>
+      <div class="yq-item" v-for="item in yqData.children" :key="item.id">
+        <ul class="province">
+          <li>{{ item.name }}</li>
+          <li>{{ item.today.confirm }}</li>
+          <li>{{ item.total.confirm }}</li>
+          <li>{{ item.total.dead }}</li>
+          <li>{{ item.total.heal }}</li>
         </ul>
       </div>
     </div>
@@ -113,13 +129,31 @@ export default {
     return {
       option: {},
       myChart: {},
-      dataList: []
+      dataList: [],
+      timeNow: '',
+      yqData: {
+        today: {},
+        total: {},
+        children: []
+      },
+      chartLegendData: [],
+      chartXData: [],
+      chartSeries: []
     };
   },
   async mounted() {
+    this.timeNow = localStorage.getItem('updateTime');
+    const listTotal = JSON.parse(localStorage.getItem('listTotal'));
+    this.yqData = listTotal.areaTree[0].children.find(
+      c => c.name == this.$route.query.name
+    );
+    console.log(this.yqData);
+    if (this.yqData) {
+    }
     // this.loadMapData('/datas/map/json/china');
     // this.myChart.on('click', this.changeMapData);
     this.initMap();
+    this.loadLineChart();
   },
   methods: {
     randomValue() {
@@ -156,22 +190,70 @@ export default {
       //   this.loadMapData('/datas/map/json/province/' + cityNamePY);
       // }
     },
+    //
+
+    async loadLineChart(type = 'today') {
+      const areaList = await axios.post(
+        'http://api.cat-shop.penkuoer.com/api/v2/proxy',
+        {
+          url: `https://c.m.163.com/ug/api/wuhan/app/data/list-by-area-code?areaCode=${this.yqData.id}&t=1581577881929`
+        }
+      );
+      let chartLegendData = ['确诊', '疑似', '治愈', '死亡'],
+        chartXData = [],
+        chartSeries = [],
+        confirmData = [], // 确诊数量数组
+        suspectData = [], // 疑似数组
+        healData = [], //  治愈数组
+        deadData = []; // 死亡数组
+      areaList.data.data.list.forEach(t => {
+        chartXData.push(t.date);
+        // chartSeries.push()
+        confirmData.push(t[type].confirm);
+        suspectData.push(t[type].suspect);
+        healData.push(t[type].heal);
+        deadData.push(t[type].dead);
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '确诊',
+        data: confirmData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '疑似',
+        data: suspectData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '治愈',
+        data: healData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '死亡',
+        data: deadData
+      });
+      this.chartLegendData = chartLegendData;
+      this.chartXData = chartXData;
+      this.chartSeries = chartSeries;
+    },
     async loadMapData(mapName) {
       var strUrl = mapName + '.json';
       // console.log(strUrl);
       this.myChart = echarts.init(this.$refs.chatrs);
       const mapData = await axios.get(strUrl);
-      const yqData = await axios.get('/datas/yiqing_0212.json');
-      const cityYQ = yqData.data.filter(
-        y =>
-          y.province_name == this.$route.query.name &&
-          y.date_info == '2020-02-12'
-      );
-      console.log(cityYQ);
-      this.dataList = cityYQ.map(item => {
+      // const yqData = await axios.get('/datas/yiqing_0212.json');
+      // const cityYQ = yqData.data.filter(
+      //   y =>
+      //     y.province_name == this.$route.query.name &&
+      //     y.date_info == '2020-02-12'
+      // );
+      // console.log(cityYQ);
+      this.dataList = this.yqData.children.map(item => {
         return {
-          name: item.cityName + '市',
-          value: item.confirmedCount
+          name: item.name + '市',
+          value: item.total.confirm
         };
       });
 
@@ -404,7 +486,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  margin: 0;
+  margin: 0 1rem;
   padding: 0;
   width: 100%;
 }
@@ -414,5 +496,8 @@ export default {
   align-items: center;
   height: 30px;
   border-bottom: 0.005rem solid #9e9e9e;
+}
+.yq-item ul li {
+  width: 80px;
 }
 </style>

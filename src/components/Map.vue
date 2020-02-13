@@ -8,6 +8,7 @@
 import BaiduMap from 'BaiduMap'; // 百度地图
 import BMapLib from 'BMapLib'; // 百度地图开源库 做图形运算http://lbs.baidu.com/index.php?title=jspopular3.0/openlibrary
 import axios from 'axios';
+import CenterPotin from '../assets/images/p.png';
 export default {
   name: 'HelloWorld',
   props: {
@@ -16,7 +17,10 @@ export default {
   data() {
     return {
       map: {},
-      data: []
+      data: [],
+      points: [],
+      circle: {}, // 查询边界
+      centerPoint: {} // 查询中心点
     };
   },
   mounted() {
@@ -78,7 +82,9 @@ export default {
       // alert(e.point.lng + ', ' + e.point.lat);
       // 点击地图之后画查询图形
       console.log(e);
-      this.map.clearOverlays();
+      // this.map.clearOverlays();
+      this.map.removeOverlay(this.circle);
+      this.map.removeOverlay(this.centerPoint);
       const mPoint = new BMap.Point(e.point.lng, e.point.lat);
       var circle = new BMap.Circle(mPoint, 1000, {
         fillColor: 'blue',
@@ -86,10 +92,22 @@ export default {
         fillOpacity: 0.3,
         strokeOpacity: 0.3
       });
+      var myIcon = new BMap.Icon(CenterPotin, new BMap.Size(30, 40));
+      var markerCenter = new BMap.Marker(mPoint, { icon: myIcon });
+      this.circle = circle;
+      this.centerPoint = markerCenter;
       this.map.addOverlay(circle);
+      this.map.addOverlay(markerCenter);
       console.log(this.map.getOverlays()); // 获取覆盖物
-      const c = new BMap.Point(116.404, 39.915);
-      console.log(BMapLib.GeoUtils.isPointInCircle(c, circle));
+      // const c = new BMap.Point(116.404, 39.915);
+      // console.log(BMapLib.GeoUtils.isPointInCircle(c, circle));
+      let result = [];
+      this.data.forEach(p => {
+        if (BMapLib.GeoUtils.isPointInCircle(p, circle)) {
+          result.push(p);
+        }
+      });
+      console.log(result);
 
       var sContent = `<div class="notice">
         <h3>周边疫情</h3>
@@ -114,16 +132,20 @@ export default {
           try {
             const lng = info.location.split(', ')[0] * 1;
             const lat = info.location.split(', ')[1] * 1;
-            points.push(new BMap.Point(lng, lat));
+            const pointInfo = new BMap.Point(lng, lat);
+            pointInfo.info = info;
+            // points.push(new BMap.Point(lng, lat));
+            points.push(pointInfo);
           } catch (err) {
             console.log(err);
           }
         });
         var options = {
           size: BMAP_POINT_SIZE_SMALL,
-          shape: BMAP_POINT_SHAPE_STAR,
+          shape: BMAP_POINT_SHAPE_CIRCLE,
           color: '#d340c3'
         };
+        this.data = points;
         var pointCollection = new BMap.PointCollection(points, options);
         this.map.addOverlay(pointCollection);
       });

@@ -34,6 +34,14 @@ const routes = [
     }
   },
   {
+    path: '/detail',
+    name: 'YQDetail',
+    component: () => import('../views/YQDetail.vue'),
+    meta: {
+      navIndex: 0
+    }
+  },
+  {
     path: '/news',
     name: 'News',
     component: () => import('../views/News.vue'),

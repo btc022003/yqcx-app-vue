@@ -1,9 +1,14 @@
 <template>
   <div class="view">
     <div class="top">
+      <router-link :to="{name: 'Home'}" class="btn-back">全国数据</router-link>
       <img class="logo" src="../assets/images/logo.png" />
       <span class="tip-1 tip">新型冠状病毒肺炎</span>
-      <span class="tip-2 tip">疫情实时追踪</span>
+      <span class="tip-2 tip">
+        <strong
+          style="margin: 0.2rem;background-color: #fff;color: #000; padding: 0.1rem;font-size: 28px;border-radius: 8px;"
+        >{{$route.query.name}}</strong>实时疫情
+      </span>
       <span class="tip-3 tip">数据来源:国家及卫健委每日信息发布</span>
     </div>
     <div class="dashboard">
@@ -21,7 +26,7 @@
             </p>
             <p class="tj-item-nums tj-item-nums-color">42744</p>
           </div>
-          <div class="tj-item-title">全国确诊</div>
+          <div class="tj-item-title">全部确诊</div>
         </div>
         <div class="tj-item item-noconfirm">
           <div class="tj-item-desc">
@@ -55,45 +60,39 @@
         </div>
       </div>
     </div>
-    <div class="main" style="margin: 10px; background-color: #fff">
+    <div class="main" style="margin: 0; background-color: #fff">
       <div ref="chatrs" style="width: 100%;height:340px;"></div>
     </div>
-    <LineChart />
-    <ul class="chart-switch">
-      <li>
-        <div class="btn-chart-switch">
-          全国疫情
-          <br />新增趋势
-        </div>
-      </li>
-      <li>
-        <div class="btn-chart-switch">
-          累计确诊
-          <br />现有疑似
-        </div>
-      </li>
-      <li>
-        <div class="btn-chart-switch">
-          累计确诊
-          <br />现有疑似
-        </div>
-      </li>
-      <li>
-        <div class="btn-chart-switch">
-          累计确诊
-          <br />现有疑似
-        </div>
-      </li>
-    </ul>
+    <LineChart title="疫情趋势图" />
     <div class="qg">
       <div class="s"></div>
-      <h3>中国疫情(包含港澳台)</h3>
+      <h3>{{$route.query.name}}疫情</h3>
       <p>7:00-9:00为更新高峰期，数据如有之后情谅解</p>
     </div>
-    <YQCollapse />
+    <div class="yq-list ul">
+      <div class="yq-item header">
+        <ul>
+          <li>地区</li>
+          <li>新增确诊</li>
+          <li>累计确诊</li>
+          <li>治愈</li>
+          <li>死亡</li>
+          <li>病死率</li>
+        </ul>
+      </div>
+      <div class="yq-item">
+        <ul class="province" @click="item.opened = !item.opened">
+          <li>郑州</li>
+          <li>2097</li>
+          <li>31728</li>
+          <li>900</li>
+          <li>9801</li>
+          <li>3.07%</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
 // 疫情数据
 import axios from 'axios';
@@ -105,7 +104,7 @@ import YQCollapse from '../components/YQCollapse';
 import LineChart from '../components/LineChart';
 import { cityMap } from '../utils/china';
 export default {
-  name: 'Home',
+  name: 'YQDetail',
   components: {
     YQCollapse,
     LineChart
@@ -118,8 +117,9 @@ export default {
     };
   },
   async mounted() {
-    this.loadMapData('/datas/map/json/china');
-    this.myChart.on('click', this.changeMapData);
+    // this.loadMapData('/datas/map/json/china');
+    // this.myChart.on('click', this.changeMapData);
+    this.initMap();
   },
   methods: {
     randomValue() {
@@ -127,6 +127,21 @@ export default {
     },
     backQuanGuo() {
       this.loadMapData('/datas/map/json/china');
+    },
+    initMap() {
+      const pName = this.$route.query.name;
+      if (pName) {
+        if (pName.indexOf('市') > -1) {
+          this.loadMapData('/datas/map/json/citys/' + cityMap[pName]);
+        } else {
+          const cityNamePY = Pinyin(pName, {
+            style: Pinyin.STYLE_NORMAL
+          }).join('');
+          this.loadMapData('/datas/map/json/province/' + cityNamePY);
+        }
+      } else {
+        this.loadMapData('/datas/map/json/china');
+      }
     },
     changeMapData(params) {
       console.log('....');
@@ -146,10 +161,16 @@ export default {
       // console.log(strUrl);
       this.myChart = echarts.init(this.$refs.chatrs);
       const mapData = await axios.get(strUrl);
-      const yqData = await axios.get('/datas/aly.json');
-      this.dataList = yqData.data.map(item => {
+      const yqData = await axios.get('/datas/yiqing_0212.json');
+      const cityYQ = yqData.data.filter(
+        y =>
+          y.province_name == this.$route.query.name &&
+          y.date_info == '2020-02-12'
+      );
+      console.log(cityYQ);
+      this.dataList = cityYQ.map(item => {
         return {
-          name: item.provinceShortName,
+          name: item.cityName + '市',
           value: item.confirmedCount
         };
       });
@@ -161,13 +182,7 @@ export default {
           formatter: function(params, ticket, callback) {
             return (
               // params.seriesName +
-              params.name +
-              '：' +
-              params.value +
-              '确诊<br />' +
-              '<a href="#/detail?name=' +
-              params.name +
-              '" style="pointer-events: all;color: #fff;">点击查看详情>></a>'
+              params.name + '：' + params.value + '确诊'
             );
           }
         },
@@ -228,7 +243,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .top {
   width: 100%;
@@ -343,28 +357,6 @@ export default {
   text-align: center;
   padding: 0.5rem 0.1rem;
 }
-
-.chart-switch {
-  margin: 0.5rem 0;
-  display: flex;
-  /* margin: 0; */
-  padding: 0;
-  flex-direction: row;
-  justify-content: space-around;
-}
-.btn-chart-switch {
-  background-color: #e0e2e4;
-  text-align: center;
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 0.3rem 0.8rem;
-  border: 1px solid rgba(224, 226, 228, 1);
-}
-.btn-chart-switch-cur {
-  border: 1px solid rgba(0, 93, 239, 1);
-
-  color: #005def;
-}
 .qg {
   position: relative;
   margin: 1rem;
@@ -391,5 +383,36 @@ export default {
   line-height: 17px;
   margin: 0.2rem;
   padding: 0;
+}
+.btn-back {
+  background: linear-gradient(
+    90deg,
+    rgba(250, 217, 97, 1) 0%,
+    rgba(247, 107, 28, 1) 100%
+  );
+  border-radius: 15px;
+  float: right;
+  margin-top: 16px;
+  margin-right: 16px;
+  color: #fff;
+  border: 0;
+  /* font-size: 18px; */
+  padding: 0.5rem 1rem;
+}
+
+.yq-list ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+.yq-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  border-bottom: 0.005rem solid #9e9e9e;
 }
 </style>

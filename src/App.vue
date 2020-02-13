@@ -84,22 +84,24 @@ export default {
   overflow: auto;
 }
 .nav {
-  height: 45px;
+  height: 60px;
 }
 .nav img {
-  width: 28px;
+  width: 22px;
 }
 .nav .router-link-exact-active {
   color: #007aff;
 }
 .nav a {
+  padding-top: 4px;
   display: flex;
   align-items: center;
   flex-direction: column;
   color: #979797;
 }
 .nav a span {
-  font-size: 12px;
+  margin-top: 5px;
+  font-size: 10px;
 }
 .nav ul {
   display: flex;

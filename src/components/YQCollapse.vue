@@ -14,9 +14,11 @@
       <ul class="province" @click="item.opened = !item.opened">
         <li>
           <img
+            class="icon-arrow"
             :src="iconArrow"
             :style="item.opened ? {} : { transform: 'rotate(-90deg)' }"
-          />{{ item.provinceShortName }}
+          />
+          {{ item.provinceShortName }}
         </li>
         <li>2097</li>
         <li>31728</li>
@@ -82,5 +84,8 @@ export default {
 }
 .collapse-item .child {
   margin-left: 1rem;
+}
+.icon-arrow {
+  width: 10px;
 }
 </style>

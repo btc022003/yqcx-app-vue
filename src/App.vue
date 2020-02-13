@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view class="main-container" />
+    <keep-alive include="Home">
+      <router-view class="main-container" />
+    </keep-alive>
+
     <div class="nav">
       <ul>
         <li>

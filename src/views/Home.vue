@@ -9,17 +9,20 @@
     <div class="dashboard">
       <div class="title">
         统计截止
-        <span>2020-02-11 20:42:54</span> 更新于
-        <span>3分钟</span>前
+        <span>{{ timeNow }}</span>
       </div>
       <div class="tj">
         <div class="tj-item item-confirm">
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ listTotal.chinaTotal.today.confirm }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ listTotal.chinaTotal.total.confirm }}
+            </p>
           </div>
           <div class="tj-item-title">全国确诊</div>
         </div>
@@ -27,9 +30,13 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ listTotal.chinaTotal.today.suspect }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ listTotal.chinaTotal.total.suspect }}
+            </p>
           </div>
           <div class="tj-item-title">疑似病例</div>
         </div>
@@ -37,9 +44,13 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ listTotal.chinaTotal.today.heal }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ listTotal.chinaTotal.total.heal }}
+            </p>
           </div>
           <div class="tj-item-title">治愈人数</div>
         </div>
@@ -47,9 +58,13 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color">+2509</span>
+              <span class="tj-item-nums-color"
+                >+{{ listTotal.chinaTotal.today.dead }}</span
+              >
             </p>
-            <p class="tj-item-nums tj-item-nums-color">42744</p>
+            <p class="tj-item-nums tj-item-nums-color">
+              {{ listTotal.chinaTotal.total.dead }}
+            </p>
           </div>
           <div class="tj-item-title">死亡人数</div>
         </div>
@@ -58,28 +73,48 @@
     <div class="main" style="margin: 10px; background-color: #fff">
       <div ref="chatrs" style="width: 100%;height:340px;"></div>
     </div>
-    <LineChart />
+    <LineChart
+      :chartLegendData="chartLegendData"
+      :chartXData="chartXData"
+      :chartSeries="chartSeries"
+    />
     <ul class="chart-switch">
       <li>
-        <div class="btn-chart-switch">
+        <div
+          @click="loadLineChart('today')"
+          class="btn-chart-switch"
+          :class="{ 'btn-chart-switch-cur': switchIndex == 'today' }"
+        >
           全国疫情
           <br />新增趋势
         </div>
       </li>
       <li>
-        <div class="btn-chart-switch">
+        <div
+          @click="loadLineChart('total')"
+          class="btn-chart-switch"
+          :class="{ 'btn-chart-switch-cur': switchIndex == 'total' }"
+        >
+          今日疫情
+          <br />累计趋势
+        </div>
+      </li>
+      <li>
+        <div
+          @click="loadLineChart('2')"
+          class="btn-chart-switch"
+          :class="{ 'btn-chart-switch-cur': switchIndex == '2' }"
+        >
           累计确诊
           <br />现有疑似
         </div>
       </li>
       <li>
-        <div class="btn-chart-switch">
-          累计确诊
-          <br />现有疑似
-        </div>
-      </li>
-      <li>
-        <div class="btn-chart-switch">
+        <div
+          @click="loadLineChart('3')"
+          class="btn-chart-switch"
+          :class="{ 'btn-chart-switch-cur': switchIndex == '3' }"
+        >
           累计确诊
           <br />现有疑似
         </div>
@@ -90,7 +125,7 @@
       <h3>中国疫情(包含港澳台)</h3>
       <p>7:00-9:00为更新高峰期，数据如有之后情谅解</p>
     </div>
-    <YQCollapse />
+    <YQCollapse :provinceData="provinceData" />
   </div>
 </template>
 
@@ -99,6 +134,7 @@
 import axios from 'axios';
 import echarts from 'echarts';
 import Pinyin from 'pinyin';
+import moment from 'moment';
 import bg from '../assets/images/bg.png';
 // @ is an alias to /src
 import YQCollapse from '../components/YQCollapse';
@@ -114,11 +150,55 @@ export default {
     return {
       option: {},
       myChart: {},
-      dataList: []
+      dataList: [],
+      listTotal: {
+        chinaTotal: {
+          today: {},
+          total: {}
+        },
+        chinaDayList: [],
+        areaTree: []
+      },
+      provinceData: [],
+      timeNow: moment().format('YYYY-MM-DD HH:mm:ss'),
+      chartLegendData: [],
+      chartXData: [],
+      chartSeries: [],
+      switchIndex: 'today'
     };
   },
   async mounted() {
+    const resu = await axios.post(
+      'http://api.cat-shop.penkuoer.com/api/v2/proxy',
+      {
+        url:
+          'https://c.m.163.com/ug/api/wuhan/app/data/list-total?t=1581577881244'
+      }
+    );
+    console.log(resu);
+    this.listTotal = resu.data.data;
+    localStorage.setItem('listTotal', JSON.stringify(this.listTotal));
+
+    // 手风琴效果
+    if (this.listTotal.areaTree.length > 0) {
+      const china = this.listTotal.areaTree[0].children;
+      console.log(china);
+      if (china) {
+        this.provinceData = china.map(item => {
+          this.dataList.push({
+            name: item.name,
+            value: item.total.confirm
+          });
+          return {
+            ...item,
+            opened: false
+          };
+        });
+      }
+    }
     this.loadMapData('/datas/map/json/china');
+    // lineChart
+    this.loadLineChart();
     this.myChart.on('click', this.changeMapData);
   },
   methods: {
@@ -127,6 +207,50 @@ export default {
     },
     backQuanGuo() {
       this.loadMapData('/datas/map/json/china');
+    },
+    loadLineChart(type = 'today') {
+      this.switchIndex = type;
+      if (type == '3' || type == '2') {
+        return;
+      }
+      let chartLegendData = ['确诊', '疑似', '治愈', '死亡'],
+        chartXData = [],
+        chartSeries = [],
+        confirmData = [], // 确诊数量数组
+        suspectData = [], // 疑似数组
+        healData = [], //  治愈数组
+        deadData = []; // 死亡数组
+      this.listTotal.chinaDayList.forEach(t => {
+        chartXData.push(t.date);
+        // chartSeries.push()
+        confirmData.push(t[type].confirm);
+        suspectData.push(t[type].suspect);
+        healData.push(t[type].heal);
+        deadData.push(t[type].dead);
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '确诊',
+        data: confirmData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '疑似',
+        data: suspectData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '治愈',
+        data: healData
+      });
+      chartSeries.push({
+        type: 'line',
+        name: '死亡',
+        data: deadData
+      });
+      this.chartLegendData = chartLegendData;
+      this.chartXData = chartXData;
+      this.chartSeries = chartSeries;
     },
     changeMapData(params) {
       console.log('....');
@@ -146,13 +270,13 @@ export default {
       // console.log(strUrl);
       this.myChart = echarts.init(this.$refs.chatrs);
       const mapData = await axios.get(strUrl);
-      const yqData = await axios.get('/datas/aly.json');
-      this.dataList = yqData.data.map(item => {
-        return {
-          name: item.provinceShortName,
-          value: item.confirmedCount
-        };
-      });
+      // const yqData = await axios.get('/datas/aly.json');
+      // this.dataList = yqData.data.map(item => {
+      //   return {
+      //     name: item.provinceShortName,
+      //     value: item.confirmedCount
+      //   };
+      // });
 
       echarts.registerMap(mapName, mapData.data);
       this.option = {

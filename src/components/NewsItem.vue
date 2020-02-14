@@ -1,12 +1,9 @@
 <template>
   <div class="news-item">
-    <img :src="newsImg" v-if="hasImg" alt="" />
-    <h3 class="title">防范新兴冠状病毒9个要点</h3>
-    <p class="desc">
-      数据以波浪图的形式进行呈现，包括全国疫情新
-      增趋势，累计确诊现有疑似趋势，全国累…
-    </p>
-    <p class="time">2019-02-03</p>
+    <img :src="item.img" v-if="hasImg" alt />
+    <h3 class="title">{{item.title}}</h3>
+    <p class="desc">{{item.desc}}</p>
+    <p class="time">{{item.time}}</p>
   </div>
 </template>
 <script>
@@ -16,6 +13,10 @@ export default {
     hasImg: {
       type: Boolean,
       default: false
+    },
+    item: {
+      type: Object,
+      default: {}
     }
   },
   data() {

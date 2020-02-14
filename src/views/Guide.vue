@@ -1,6 +1,7 @@
 <template>
   <div class="view">
-    <NewsItem v-for="i in 5" :key="i" />
+    <!-- <NewsItem v-for="i in 5" :key="i" /> -->
+    <img src="../assets/images/bdyd.png" style="width: 100%;" alt />
   </div>
 </template>
 

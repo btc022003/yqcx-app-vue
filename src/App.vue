@@ -84,7 +84,8 @@ export default {
 }
 .main-container {
   flex: 1;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .nav {
   height: 60px;

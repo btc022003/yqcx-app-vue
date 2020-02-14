@@ -1,16 +1,13 @@
 <template>
   <div class="view">
     <div class="top">
-      <router-link :to="{ name: 'Home' }" class="btn-back"
-        >全国数据</router-link
-      >
+      <router-link :to="{ name: 'Home' }" class="btn-back">全国数据</router-link>
       <img class="logo" src="../assets/images/logo.png" />
       <span class="tip-1 tip">新型冠状病毒肺炎</span>
       <span class="tip-2 tip">
         <strong
           style="margin: 0.2rem;background-color: #fff;color: #000; padding: 0.1rem;font-size: 28px;border-radius: 8px;"
-          >{{ $route.query.name }}</strong
-        >实时疫情
+        >{{ $route.query.name }}</strong>实时疫情
       </span>
       <span class="tip-3 tip">数据来源:国家及卫健委每日信息发布</span>
     </div>
@@ -24,17 +21,13 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color"
-                >+{{ yqData.today.confirm }}</span
-              >
+              <span class="tj-item-nums-color">+{{ yqData.today.confirm }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ yqData.total.confirm }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ yqData.total.confirm }}</p>
           </div>
           <div class="tj-item-title">全部确诊</div>
         </div>
-        <div class="tj-item item-noconfirm">
+        <!-- <div class="tj-item item-noconfirm">
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
@@ -47,16 +40,14 @@
             </p>
           </div>
           <div class="tj-item-title">疑似病例</div>
-        </div>
+        </div>-->
         <div class="tj-item item-ok">
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
               <span class="tj-item-nums-color">+{{ yqData.today.heal }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ yqData.total.heal }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ yqData.total.heal }}</p>
           </div>
           <div class="tj-item-title">治愈人数</div>
         </div>
@@ -66,9 +57,7 @@
               较上日
               <span class="tj-item-nums-color">+{{ yqData.today.dead }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ yqData.total.dead }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ yqData.total.dead }}</p>
           </div>
           <div class="tj-item-title">死亡人数</div>
         </div>
@@ -373,7 +362,7 @@ export default {
   justify-content: space-around;
 }
 .dashboard .tj .tj-item {
-  width: 22%;
+  width: 30%;
 }
 
 .dashboard .tj .tj-item p {

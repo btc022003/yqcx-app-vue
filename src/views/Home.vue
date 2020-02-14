@@ -295,7 +295,8 @@ export default {
               params.name +
               '" style="pointer-events: all;color: #fff;">点击查看详情>></a>'
             );
-          }
+          },
+          bottom: 'auto'
         },
         visualMap: {
           type: 'piecewise',

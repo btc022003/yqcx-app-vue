@@ -16,13 +16,9 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color"
-                >+{{ listTotal.chinaTotal.today.confirm }}</span
-              >
+              <span class="tj-item-nums-color">+{{ listTotal.chinaTotal.today.confirm }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ listTotal.chinaTotal.total.confirm }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ listTotal.chinaTotal.total.confirm }}</p>
           </div>
           <div class="tj-item-title">全国确诊</div>
         </div>
@@ -30,13 +26,9 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color"
-                >+{{ listTotal.chinaTotal.today.suspect }}</span
-              >
+              <span class="tj-item-nums-color">+{{ listTotal.chinaTotal.today.suspect }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ listTotal.chinaTotal.total.suspect }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ listTotal.chinaTotal.total.suspect }}</p>
           </div>
           <div class="tj-item-title">疑似病例</div>
         </div>
@@ -44,13 +36,9 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color"
-                >+{{ listTotal.chinaTotal.today.heal }}</span
-              >
+              <span class="tj-item-nums-color">+{{ listTotal.chinaTotal.today.heal }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ listTotal.chinaTotal.total.heal }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ listTotal.chinaTotal.total.heal }}</p>
           </div>
           <div class="tj-item-title">治愈人数</div>
         </div>
@@ -58,13 +46,9 @@
           <div class="tj-item-desc">
             <p class="tj-item-new-grow">
               较上日
-              <span class="tj-item-nums-color"
-                >+{{ listTotal.chinaTotal.today.dead }}</span
-              >
+              <span class="tj-item-nums-color">+{{ listTotal.chinaTotal.today.dead }}</span>
             </p>
-            <p class="tj-item-nums tj-item-nums-color">
-              {{ listTotal.chinaTotal.total.dead }}
-            </p>
+            <p class="tj-item-nums tj-item-nums-color">{{ listTotal.chinaTotal.total.dead }}</p>
           </div>
           <div class="tj-item-title">死亡人数</div>
         </div>
@@ -233,29 +217,33 @@ export default {
       chartSeries.push({
         type: 'line',
         name: '确诊',
-        data: confirmData
+        data: confirmData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '疑似',
-        data: suspectData
+        data: suspectData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '治愈',
-        data: healData
+        data: healData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '死亡',
-        data: deadData
+        data: deadData,
+        smooth: true
       });
       this.chartLegendData = chartLegendData;
       this.chartXData = chartXData;
       this.chartSeries = chartSeries;
     },
     changeMapData(params) {
-      console.log('....');
+      // console.log('....');
       // https://github.com/hotoo/pinyin
       // console.log(params);
       // if (params.name.indexOf('市') > -1) {
@@ -270,7 +258,7 @@ export default {
     async loadMapData(mapName) {
       var strUrl = mapName + '.json';
       // console.log(strUrl);
-      this.myChart = echarts.init(this.$refs.chatrs);
+      this.myChart = echarts.init(this.$refs.chatrs, null, { renderer: 'svg' });
       const mapData = await axios.get(strUrl);
       // const yqData = await axios.get('/datas/aly.json');
       // this.dataList = yqData.data.map(item => {

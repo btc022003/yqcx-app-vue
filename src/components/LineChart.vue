@@ -1,6 +1,6 @@
 <template>
   <div class="line-chart">
-    <div id="chart" ref="chatrs" style="width: 100%;height:212px;"></div>
+    <div id="chartLine" ref="chatrs" style="width: 100%;height:212px;"></div>
   </div>
 </template>
 <script>
@@ -31,9 +31,22 @@ export default {
   },
   watch: {
     chartLegendData() {
-      console.log('....');
-      this.myChart = echarts.init(this.$refs.chatrs);
+      // console.log('....');
+      this.myChart = echarts.init(this.$refs.chatrs, null, { renderer: 'svg' });
       const option = {
+        tooltip: {
+          formatter: function(params, ticket, callback) {
+            return (
+              // params.seriesName +
+              params.name + ':' + params.seriesName + params.value
+            );
+          },
+          bottom: 'auto'
+        },
+        grid: {
+          left: 5,
+          containLabel: true
+        },
         title: {
           text: this.title
         },

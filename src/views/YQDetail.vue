@@ -157,9 +157,12 @@ export default {
         if (pName.indexOf('市') > -1) {
           this.loadMapData('/datas/map/json/citys/' + cityMap[pName]);
         } else {
-          const cityNamePY = Pinyin(pName, {
+          let cityNamePY = Pinyin(pName, {
             style: Pinyin.STYLE_NORMAL
           }).join('');
+          if (pName == '陕西') {
+            cityNamePY = 'shanxi1';
+          }
           this.loadMapData('/datas/map/json/province/' + cityNamePY);
         }
       } else {
@@ -206,22 +209,26 @@ export default {
       chartSeries.push({
         type: 'line',
         name: '确诊',
-        data: confirmData
+        data: confirmData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '疑似',
-        data: suspectData
+        data: suspectData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '治愈',
-        data: healData
+        data: healData,
+        smooth: true
       });
       chartSeries.push({
         type: 'line',
         name: '死亡',
-        data: deadData
+        data: deadData,
+        smooth: true
       });
       this.chartLegendData = chartLegendData;
       this.chartXData = chartXData;
@@ -230,7 +237,7 @@ export default {
     async loadMapData(mapName) {
       var strUrl = mapName + '.json';
       // console.log(strUrl);
-      this.myChart = echarts.init(this.$refs.chatrs);
+      this.myChart = echarts.init(this.$refs.chatrs, null, { renderer: 'svg' });
       const mapData = await axios.get(strUrl);
       // const yqData = await axios.get('/datas/yiqing_0212.json');
       // const cityYQ = yqData.data.filter(

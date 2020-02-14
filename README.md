@@ -22,6 +22,7 @@ npm run build
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
+不能用。。。
 [接口地址](http://39.105.189.141:8080/swagger-ui.html)
 
 [蓝湖](https://lanhuapp.com/url/JN95c-hFzOw)

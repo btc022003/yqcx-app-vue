@@ -93,9 +93,10 @@ export default {
 }
 .collapse-item ul li {
   width: 80px;
+  height: 26px;
 }
 .collapse-item .child {
-  margin-left: 1rem;
+  margin-left: 2rem;
 }
 .icon-arrow {
   width: 10px;

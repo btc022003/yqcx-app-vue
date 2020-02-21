@@ -80,19 +80,19 @@
       <div class="yq-item header">
         <ul>
           <li>地区</li>
-          <li>新增确诊</li>
-          <li>累计确诊</li>
-          <li>治愈</li>
-          <li>死亡</li>
+          <li style="background:rgba(232,239,252,1);color: #0070FF">新增确诊</li>
+          <li style="background:rgba(255,224,224,1);color: #FF1B42">累计确诊</li>
+          <li style="background:rgba(223,238,229,1);color: #00923F">治愈</li>
+          <li style="color: #00923F; background:rgba(238,238,238,1);">死亡</li>
         </ul>
       </div>
       <div class="yq-item" v-for="item in yqData.children" :key="item.id">
         <ul class="province">
           <li>{{ item.name }}</li>
-          <li>{{ item.today.confirm }}</li>
-          <li>{{ item.total.confirm }}</li>
-          <li>{{ item.total.dead }}</li>
-          <li>{{ item.total.heal }}</li>
+          <li class="num">{{ item.today.confirm }}</li>
+          <li class="num">{{ item.total.confirm }}</li>
+          <li class="num">{{ item.total.dead }}</li>
+          <li class="num">{{ item.total.heal }}</li>
         </ul>
       </div>
     </div>
@@ -491,9 +491,19 @@ export default {
   display: flex;
   align-items: center;
   height: 30px;
-  border-bottom: 0.005rem solid #9e9e9e;
+  border-bottom: 0.005rem solid #e9e9e9;
 }
 .yq-item ul li {
   width: 80px;
+}
+.yq-item ul li.num {
+  text-align: center;
+}
+.yq-item.header li {
+  padding: 0.3rem 0;
+  text-align: center;
+}
+.yq-item.header li:nth-child(1) {
+  text-align: left;
 }
 </style>

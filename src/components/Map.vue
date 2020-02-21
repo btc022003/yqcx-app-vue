@@ -109,7 +109,7 @@ export default {
         this.centerPoint = markerCenter;
         this.map.addOverlay(circle);
         this.map.addOverlay(markerCenter);
-        console.log(this.map.getOverlays()); // 获取覆盖物
+        // console.log(this.map.getOverlays()); // 获取覆盖物
         // const c = new BMap.Point(116.404, 39.915);
         // console.log(BMapLib.GeoUtils.isPointInCircle(c, circle));
         let result = [];
@@ -122,11 +122,10 @@ export default {
         var strH = ``;
         if (result.length > 0) {
           let allCount = result.reduce((p, c) => {
-            let sumC = p;
             if (c.info.count > 0) {
-              sumC + c.info.count;
+              return p + c.info.count;
             }
-            return sumC;
+            return p;
           }, 0);
           strH += `目前已有 <strong>${allCount}</strong> 起新型冠状病毒肺炎确诊病例。离你最近的在
           <strong>${result[0].info.address}</strong>`;

@@ -1,9 +1,11 @@
 <template>
   <div class="news-item">
-    <img :src="item.img" v-if="hasImg" alt />
+    <a target="_blank" :href="item.link">
+      <img :src="item.img" v-if="hasImg" alt />
+    </a>
     <h3 class="title">{{item.title}}</h3>
     <p class="desc">{{item.desc}}</p>
-    <p class="time">{{item.time}}</p>
+    <!-- <p class="time">{{item.time}}</p> -->
   </div>
 </template>
 <script>

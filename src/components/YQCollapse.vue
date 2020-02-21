@@ -2,17 +2,17 @@
   <div class="collapse">
     <div class="collapse-item header">
       <ul>
-        <li>地区</li>
-        <li>新增确诊</li>
-        <li>累计确诊</li>
-        <li>治愈</li>
-        <li>死亡</li>
+        <li class="name blue" style="text-align:left">地区</li>
+        <li class="num blue">新增确诊</li>
+        <li class="num">累计确诊</li>
+        <li class="num">治愈</li>
+        <li class="num">死亡</li>
         <!-- <li>病死率</li> -->
       </ul>
     </div>
-    <div class="collapse-item" v-for="item in provinceData" :key="item.id">
+    <div class="collapse-item body" v-for="item in provinceData" :key="item.id">
       <ul class="province" @click="item.opened = !item.opened">
-        <li>
+        <li class="name blue">
           <img
             class="icon-arrow"
             :src="iconArrow"
@@ -20,18 +20,18 @@
           />
           {{ item.name }}
         </li>
-        <li>{{ item.today.confirm }}</li>
-        <li>{{ item.total.confirm }}</li>
-        <li>{{ item.total.dead }}</li>
-        <li>{{ item.total.heal }}</li>
+        <li class="num blue">{{ item.today.confirm }}</li>
+        <li class="num">{{ item.total.confirm }}</li>
+        <li class="num">{{ item.total.dead }}</li>
+        <li class="num">{{ item.total.heal }}</li>
       </ul>
       <div :style="item.opened ? {} : { display: 'none' }">
         <ul class="child" v-for="yq in item.children" :key="yq.id">
-          <li>{{ yq.name }}</li>
-          <li>{{ yq.today.confirm }}</li>
-          <li>{{ yq.total.confirm }}</li>
-          <li>{{ yq.total.dead }}</li>
-          <li>{{ yq.total.heal }}</li>
+          <li class="name blue">{{ yq.name }}</li>
+          <li class="num blue">{{ yq.today.confirm }}</li>
+          <li class="num">{{ yq.total.confirm }}</li>
+          <li class="num">{{ yq.total.dead }}</li>
+          <li class="num">{{ yq.total.heal }}</li>
         </ul>
       </div>
     </div>
@@ -95,10 +95,33 @@ export default {
   width: 80px;
   height: 26px;
 }
+.collapse-item.header {
+  /* margin-left: 10px; */
+}
+.collapse-item.header li {
+  font-size: 14px;
+  text-align: center;
+  width: 80px;
+}
+.collapse-item ul li.blue {
+  color: #007aff;
+}
+.collapse-item ul li.name {
+  /* width: 120px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.collapse-item.body ul li.num {
+  text-align: center;
+}
 .collapse-item .child {
   margin-left: 2rem;
 }
 .icon-arrow {
   width: 10px;
+}
+.collapse-item li {
+  border-bottom: 0.005rem solid #e9e9e9;
 }
 </style>

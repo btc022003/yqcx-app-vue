@@ -83,7 +83,7 @@
           <br />累计趋势
         </div>
       </li>
-      <li>
+      <!-- <li>
         <div
           @click="loadLineChart('2')"
           class="btn-chart-switch"
@@ -102,7 +102,7 @@
           累计确诊
           <br />现有疑似
         </div>
-      </li>
+      </li>-->
     </ul>
     <div class="qg">
       <div class="s"></div>
@@ -470,9 +470,9 @@ export default {
 .btn-chart-switch {
   background-color: #e0e2e4;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 4px;
-  padding: 0.3rem 0.8rem;
+  padding: 0.3rem 2.8rem;
   border: 1px solid rgba(224, 226, 228, 1);
 }
 .btn-chart-switch-cur {

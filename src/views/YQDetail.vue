@@ -83,7 +83,7 @@
           <li style="background:rgba(232,239,252,1);color: #0070FF">新增确诊</li>
           <li style="background:rgba(255,224,224,1);color: #FF1B42">累计确诊</li>
           <li style="background:rgba(223,238,229,1);color: #00923F">治愈</li>
-          <li style="color: #00923F; background:rgba(238,238,238,1);">死亡</li>
+          <li style="color: #66666C; background:rgba(238,238,238,1);">死亡</li>
         </ul>
       </div>
       <div class="yq-item" v-for="item in yqData.children" :key="item.id">

@@ -5,6 +5,7 @@
       <span class="tip-1 tip">新型冠状病毒肺炎</span>
       <span class="tip-2 tip">疫情实时追踪</span>
       <span class="tip-3 tip">数据来源:国家及卫健委每日信息发布</span>
+      <img class="ewm" src="../assets/images/ewm.jpg" alt />
     </div>
     <div class="dashboard">
       <div class="title">
@@ -107,7 +108,7 @@
     <div class="qg">
       <div class="s"></div>
       <h3>中国疫情(包含港澳台)</h3>
-      <p>7:00-9:00为更新高峰期，数据如有之后情谅解</p>
+      <p>7:00-9:00为更新高峰期，数据如有滞后请谅解</p>
     </div>
     <YQCollapse :provinceData="provinceData" />
   </div>
@@ -346,6 +347,7 @@ export default {
 
 <style scoped>
 .top {
+  position: relative;
   width: 100%;
   height: 165px;
   /* background-color: #0057fb; */
@@ -506,5 +508,12 @@ export default {
   line-height: 17px;
   margin: 0.2rem;
   padding: 0;
+}
+.ewm {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 100px;
+  transform: translate3d(0, -50%, 0);
 }
 </style>

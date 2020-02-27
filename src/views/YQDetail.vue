@@ -74,7 +74,7 @@
     <div class="qg">
       <div class="s"></div>
       <h3>{{ $route.query.name }}疫情</h3>
-      <p>7:00-9:00为更新高峰期，数据如有之后情谅解</p>
+      <p>7:00-9:00为更新高峰期，数据如有滞后请谅解</p>
     </div>
     <div class="yq-list ul">
       <div class="yq-item header">
@@ -91,8 +91,8 @@
           <li>{{ item.name }}</li>
           <li class="num">{{ item.today.confirm }}</li>
           <li class="num">{{ item.total.confirm }}</li>
-          <li class="num">{{ item.total.dead }}</li>
           <li class="num">{{ item.total.heal }}</li>
+          <li class="num">{{ item.total.dead }}</li>
         </ul>
       </div>
     </div>

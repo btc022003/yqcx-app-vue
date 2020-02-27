@@ -22,16 +22,16 @@
         </li>
         <li class="num blue">{{ item.today.confirm }}</li>
         <li class="num">{{ item.total.confirm }}</li>
-        <li class="num">{{ item.total.dead }}</li>
         <li class="num">{{ item.total.heal }}</li>
+        <li class="num">{{ item.total.dead }}</li>
       </ul>
       <div :style="item.opened ? {} : { display: 'none' }">
         <ul class="child" v-for="yq in item.children" :key="yq.id">
           <li class="name blue">{{ yq.name }}</li>
           <li class="num blue">{{ yq.today.confirm }}</li>
           <li class="num">{{ yq.total.confirm }}</li>
-          <li class="num">{{ yq.total.dead }}</li>
           <li class="num">{{ yq.total.heal }}</li>
+          <li class="num">{{ yq.total.dead }}</li>
         </ul>
       </div>
     </div>

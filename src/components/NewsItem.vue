@@ -1,7 +1,9 @@
 <template>
   <div class="news-item">
     <a target="_blank" :href="item.link">
-      <img :src="item.img" v-if="hasImg" alt />
+      <div class="news-img">
+        <img :src="item.img" v-if="hasImg" alt />
+      </div>
     </a>
     <h3 class="title">{{item.title}}</h3>
     <p class="desc">{{item.desc}}</p>
@@ -32,6 +34,10 @@ export default {
 .news-item img {
   width: 100%;
   min-height: 185px;
+}
+.news-img {
+  max-height: 200px;
+  overflow: hidden;
 }
 .news-item h3 {
   margin: 0;

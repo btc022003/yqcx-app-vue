@@ -7,6 +7,10 @@ body,
   padding: 0;
   margin: 0;
 }
+body {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
 #app {
   background-color: #eeeeee;
 }
